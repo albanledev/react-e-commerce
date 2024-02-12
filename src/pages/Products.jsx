@@ -14,37 +14,39 @@ function Products() {
     //     </div>
     //   ));
     // };
-  
+
     return (
-      <div className="products">
-                <Header />
+        <div className="products">
+            <Header />
 
-        <h1 className="titleProducts">Products</h1>
+            <h1 className="titleProducts">Products</h1>
 
-        <div className="grid">
-        {
-            isLoading ? <p>Loading...</p> : isError ? <p>Error</p> : data.map((product) => (
-                
-                <div key={product.id}>
-                    <Link to={`/products/${product.id}`}>
-                        <div className="card">
-                            <div><img className="cardImage" src={product.image} alt={product.name} /></div>
-                            <h3 className="cardTitle">{product.title}</h3>
+            <div className="grid">
+                {
+                    isLoading ? <p>Loading...</p> : isError ? <p>Error</p> : data.map((product) => (
+
+                        <div key={product.id}>
+                            <Link to={`/products/${product.id}`}>
+                                <div className="card">
+                                    <div><img className="cardImage" src={product.image} alt={product.name} /></div>
+                                    <h3 className="cardTitle">{product.title}</h3>
+                                </div>
+                            </Link>
                         </div>
-                    </Link>
-                </div>
-            ))
-        }
+                    ))
+                }
+            </div>
+
+
+
+
+
+
+
+            {/* Appelez la fonction renderProducts et affichez la liste d'éléments JSX */}
+            {/* {renderProducts(products)} */}
         </div>
-        
-
-
-
-  
-        {/* Appelez la fonction renderProducts et affichez la liste d'éléments JSX */}
-        {/* {renderProducts(products)} */}
-      </div>
     );
-  }
-  
-  export default Products;
+}
+
+export default Products;

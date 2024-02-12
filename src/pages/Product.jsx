@@ -1,11 +1,21 @@
 import { Link, useParams } from "react-router-dom";
 import Header from "../Components/Header";
-import { useGetProductsQuery, useGetCommentsQuery } from "../services/API";
+import { useGetProductsQuery, useGetCommentsQuery, useCreateCommentMutation } from "../services/API";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../CartSlice'; // Importez l'action addToCart du slice du panier
+
+
 
 function Product() {
+    const dispatch = useDispatch();
     const { data, isLoading, isError } = useGetProductsQuery();
     const params = useParams();
+    const [createComment] = useCreateCommentMutation(params.productId);
+    const cart = useSelector((state) => state.cart); // Récupérez l'état du panier
+
+
+
 
     const { data: commentsData, isLoading: commentsIsLoading, isError: commentsIsError } = useGetCommentsQuery(params.productId);
     const [productFound, setProductFound] = useState(false);
@@ -13,7 +23,8 @@ function Product() {
     let [username, setUsername] = useState("");
     let [content, setContent] = useState("");
     useEffect(() => {
-        console.log(params.productId)
+        // console.log(params.productId)
+        console.log(cart);
         const leBonProduit = () => {
 
             if (!isLoading && !isError && data) {
@@ -29,11 +40,17 @@ function Product() {
         };
 
         leBonProduit();
-    }, [isLoading, isError, data, params.productId]);
+    }, [isLoading, isError, data, params.productId, cart]);
 
     return (
         <div>
             <Header />
+
+            {/* Affichez le contenu du panier */}
+
+
+
+
             {productFound ? (
                 <div className="flexProduct">
                     <div>
@@ -42,7 +59,8 @@ function Product() {
                         </div>
 
                         <div className="returnProducts">
-                            <img className="flecheGauche" src="../assets/arrow left.png" alt="" /><Link className="textReturnOtherProducts" to="/products">See the other products</Link>
+                        <Link className="textReturnOtherProducts" to="/products">
+                            <img className="flecheGauche" src="../assets/arrow left.png" alt="" />See the other products</Link>
                         </div>
                     </div>
 
@@ -58,31 +76,45 @@ function Product() {
                         </div>
 
                         <div>
-                            <button className="buttonProduct">Add to cart <img src="../assets/cart black.png" alt="" /></button>
+                            <button className="buttonProduct" onClick={() => {
+                                dispatch(addToCart(product));
+                                console.log(cart); // Utilisez l'action addToCart
+                            }}>Add to cart <img src="../assets/cart black.png" alt="" /></button>
                         </div>
 
-                        <form>
+                        <div className="form">
                             <div>
                                 <input type="text" placeholder="username" value={username} onChange={(event) => {
                                     setUsername(event.target.value);
-                                }}/>
-                            </div> 
+                                }} />
+                            </div>
 
                             <div>
                                 <textarea type="text" placeholder="content" value={content} onChange={(event) => {
                                     setContent(event.target.value);
-                                }}/>
-                            </div> 
+                                }} />
+                            </div>
 
                             <div>
-                                <button type="submit">Leave a comment</button>
-                            </div>      
-                        </form>
+                                <button onClick={() => {
+                                    createComment({
+                                        productId: params.productId,
+                                        username: username,
+                                        comment: content,
+                                    });
+                                    setContent("");
+                                    setUsername("");
+                                }}>Leave a comment</button>
+                            </div>
+                        </div>
 
 
 
 
-                        {/* <button className="buttonProduct">Add to cart</button> */}
+
+
+
+
                     </div>
                 </div>
 

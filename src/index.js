@@ -8,12 +8,14 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { CartProvider } from './CartSlice';  // Ajout du CartProvider
 
 import Home from './pages/Home';
-import NotFoundPage from './pages/NotFoundPage'
+import NotFoundPage from './pages/NotFoundPage';
 import Products from './pages/Products';
 import Product from './pages/Product';
 import NotFoundElement from './pages/NotFoundElement';
+import Cart from './pages/Cart';
 
 const router = createBrowserRouter([
   {
@@ -21,7 +23,11 @@ const router = createBrowserRouter([
     element: <Home />,
     errorElement: <NotFoundPage />,
   },
-
+  {
+    path: "/cart",
+    element: <Cart />,
+    errorElement: <NotFoundPage />,
+  },
   {
     path: "/products",
     element: <Products />,
@@ -30,7 +36,6 @@ const router = createBrowserRouter([
     path: "products/:productId",
     element: <Product />,
     errorElement: <NotFoundElement />,
-
   },
 ]);
 
@@ -43,10 +48,7 @@ root.render(
         <App />
       </RouterProvider>
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

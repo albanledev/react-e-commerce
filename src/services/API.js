@@ -16,18 +16,19 @@ export const productApi = createApi({
           providesTags: ['products'],
       }),
       
-    //   createArticle: builder.mutation({
-    //       query: (data) => ({
-    //           url: `/articles`,
-    //           method: 'POST',
-    //           body: data,
-    //       }),
-    //       invalidatesTags: ['articles'],
-    //   })
+
+      createComment: builder.mutation({
+          query: (data) => ({
+              url: `/products/${data.productId}/comments`,
+              method: 'POST',
+              body: data,
+          }),
+          invalidatesTags: ['products'],
+      })
     }),
   })
 
-  export const { useGetProductsQuery, useGetProductQuery, useGetCommentsQuery } = productApi
+  export const { useGetProductsQuery, useGetCommentsQuery, useCreateCommentMutation } = productApi
 
 //query = get
 //mutation = post, put, delete
